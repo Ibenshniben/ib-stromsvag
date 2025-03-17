@@ -6,8 +6,28 @@ import Link from 'next/link'
 import ProjectCard from '@/components/ProjectCard'
 import BirthdayCountdown from '@/components/BirthdayCountdown'
 import Footer from '@/components/Footer'
-// Import Lucide icons
-import { ArrowRight, Home, Briefcase, FileText, Mail, Phone, Copy, Instagram, Github, Linkedin, ExternalLink } from 'lucide-react'
+// Import Lucide icons - optimize imports to reduce bundle size
+import { 
+  ArrowRight, 
+  Home, 
+  Briefcase, 
+  FileText, 
+  Mail, 
+  Phone, 
+  Copy, 
+  Instagram, 
+  Github, 
+  Linkedin, 
+  ExternalLink, 
+  Code, 
+  FileCode, 
+  Database, 
+  Globe, 
+  PenTool 
+} from 'lucide-react'
+
+// Remove Figma import if it's causing issues
+// import { Figma } from 'lucide-react'
 
 // Define projects array at the top of the file
 const projects = [
@@ -265,11 +285,19 @@ export default function HomePage() {
                 </ul>
               </div>
             
-              {/* Programming Skills Grid */}
+              {/* Programming Skills Grid in CV section */}
               <div className="col-span-3 grid grid-cols-2 md:grid-cols-4 gap-6">
-                {['HTML', 'CSS', 'Python', 'JavaScript', 'SQL', 'PHP'].map((skill) => (
-                  <div key={skill} className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 hover:border-blue-500/50 transition-colors">
-                    <h4 className="text-xl font-bold text-blue-400">{skill}</h4>
+                {[
+                  { name: 'HTML', icon: <Globe className="w-6 h-6 text-orange-400 mb-2" /> },
+                  { name: 'CSS', icon: <PenTool className="w-6 h-6 text-blue-400 mb-2" /> },
+                  { name: 'Python', icon: <Code className="w-6 h-6 text-yellow-400 mb-2" /> },
+                  { name: 'JavaScript', icon: <FileCode className="w-6 h-6 text-yellow-500 mb-2" /> },
+                  { name: 'SQL', icon: <Database className="w-6 h-6 text-blue-300 mb-2" /> },
+                  { name: 'PHP', icon: <Code className="w-6 h-6 text-purple-400 mb-2" /> }
+                ].map((skill) => (
+                  <div key={skill.name} className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 hover:border-blue-500/50 transition-colors flex flex-col items-center">
+                    {skill.icon}
+                    <h4 className="text-xl font-bold text-blue-400">{skill.name}</h4>
                   </div>
                 ))}
               </div>
@@ -319,16 +347,17 @@ export default function HomePage() {
                 <h3 className="text-xl font-bold mb-6 text-blue-400">Verktøy og Programvare</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {[
-                    'Visual Studio Code',
-                    'Adobe Illustrator',
-                    'Figma',
-                    'MySQL Workbench',
-                    'Microsoft Office',
-                    'Adobe Premiere Pro',
-                    'Adobe XD'
+                    { name: 'Visual Studio Code', icon: <Code className="w-5 h-5 mr-2 text-blue-400" /> },
+                    { name: 'Adobe Illustrator', icon: <PenTool className="w-5 h-5 mr-2 text-orange-400" /> },
+                    { name: 'Figma', icon: <PenTool className="w-5 h-5 mr-2 text-purple-400" /> }, // Changed from Figma to PenTool
+                    { name: 'MySQL Workbench', icon: <Database className="w-5 h-5 mr-2 text-blue-300" /> },
+                    { name: 'Microsoft Office', icon: <FileText className="w-5 h-5 mr-2 text-blue-500" /> },
+                    { name: 'Adobe Premiere Pro', icon: <FileCode className="w-5 h-5 mr-2 text-purple-500" /> },
+                    { name: 'Adobe XD', icon: <PenTool className="w-5 h-5 mr-2 text-pink-400" /> }
                   ].map((tool) => (
-                    <div key={tool} className="bg-gray-700/30 rounded-xl p-4 text-center hover:bg-gray-700/50 transition-colors">
-                      <p className="text-gray-300">{tool}</p>
+                    <div key={tool.name} className="bg-gray-700/30 rounded-xl p-4 hover:bg-gray-700/50 transition-colors flex items-center">
+                      {tool.icon}
+                      <p className="text-gray-300">{tool.name}</p>
                     </div>
                   ))}
                 </div>
@@ -484,22 +513,56 @@ export default function HomePage() {
               <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text">
                 Send meg en melding
               </h3>
-              <form className="space-y-6">
+              <form 
+                className="space-y-6" 
+                action="mailto:ibjulian9@gmail.com" 
+                method="POST" 
+                encType="text/plain"
+                onSubmit={(e) => {
+                  // Optional: Add form validation here
+                  const nameInput = document.getElementById('name') as HTMLInputElement;
+                  const emailInput = document.getElementById('email') as HTMLInputElement;
+                  const subjectInput = document.getElementById('subject') as HTMLInputElement;
+                  const messageInput = document.getElementById('message') as HTMLTextAreaElement;
+                  
+                  if (!nameInput.value || !emailInput.value || !messageInput.value) {
+                    e.preventDefault();
+                    alert('Vennligst fyll ut alle påkrevde felt (navn, e-post og melding).');
+                    return;
+                  }
+                  
+                  // Format the subject line
+                  const formattedSubject = `Kontaktskjema: ${subjectInput.value || 'Ingen emne'}`;
+                  const body = `Navn: ${nameInput.value}
+E-post: ${emailInput.value}
+Emne: ${subjectInput.value}
+
+Melding:
+${messageInput.value}`;
+                  
+                  // Update the mailto link with the form data
+                  e.currentTarget.action = `mailto:ibjulian9@gmail.com?subject=${encodeURIComponent(formattedSubject)}&body=${encodeURIComponent(body)}`;
+                }}
+              >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="name" className="block text-gray-300 mb-2">Navn</label>
+                    <label htmlFor="name" className="block text-gray-300 mb-2">Navn <span className="text-red-400">*</span></label>
                     <input 
                       type="text" 
                       id="name" 
+                      name="name"
+                      required
                       className="w-full bg-gray-700/30 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="Ditt navn"
                     />
                   </div>
                   <div>
-                    <label htmlFor="email" className="block text-gray-300 mb-2">E-post</label>
+                    <label htmlFor="email" className="block text-gray-300 mb-2">E-post <span className="text-red-400">*</span></label>
                     <input 
                       type="email" 
                       id="email" 
+                      name="email"
+                      required
                       className="w-full bg-gray-700/30 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="din.epost@example.com"
                     />
@@ -510,15 +573,18 @@ export default function HomePage() {
                   <input 
                     type="text" 
                     id="subject" 
+                    name="subject"
                     className="w-full bg-gray-700/30 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="Hva handler dette om?"
                   />
                 </div>
                 <div>
-                  <label htmlFor="message" className="block text-gray-300 mb-2">Melding</label>
+                  <label htmlFor="message" className="block text-gray-300 mb-2">Melding <span className="text-red-400">*</span></label>
                   <textarea 
                     id="message" 
+                    name="message"
                     rows={6} 
+                    required
                     className="w-full bg-gray-700/30 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="Skriv din melding her..."
                   ></textarea>
