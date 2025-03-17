@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { ArrowRight, ExternalLink } from 'lucide-react';
 
 interface ProjectCardProps {
   title: string;
@@ -37,9 +38,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ title, description, image, ta
           className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-full hover:scale-105 transition-transform shadow-lg flex items-center justify-center gap-2 w-full"
         >
           Se prosjekt
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-          </svg>
+          <ExternalLink size={16} />
         </Link>
       </div>
     </div>

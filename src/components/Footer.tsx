@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { Mail, Linkedin, Globe, Github } from 'lucide-react'
 
 export default function Footer() {
   return (
@@ -15,13 +16,16 @@ export default function Footer() {
           />
           
           <div className="flex gap-8 text-gray-400">
-            <Link href="mailto:ibjulian9@gmail.com" className="hover:text-blue-400 transition-colors">
+            <Link href="mailto:ibjulian9@gmail.com" className="hover:text-blue-400 transition-colors flex items-center gap-2">
+              <Mail size={16} />
               Email
             </Link>
-            <Link href="https://linkedin.com/in/ib-strømsvåg" target="_blank" className="hover:text-blue-400 transition-colors">
+            <Link href="https://linkedin.com/in/ib-strømsvåg" target="_blank" className="hover:text-blue-400 transition-colors flex items-center gap-2">
+              <Linkedin size={16} />
               LinkedIn
             </Link>
-            <Link href="https://ibstromsvag.com" target="_blank" className="hover:text-blue-400 transition-colors">
+            <Link href="https://ibstromsvag.com" target="_blank" className="hover:text-blue-400 transition-colors flex items-center gap-2">
+              <Globe size={16} />
               Portfolio
             </Link>
           </div>
