@@ -44,6 +44,13 @@ export default function Home() {
       link: "https://vikings-nettside.vercel.app"
     },
     {
+      title: "Fakultet Kalkulator",
+      description: "En kalkulator som beregner fakultet av tall. Utviklet med HTML, CSS og JavaScript.",
+      image: "/images/fakultet-kalkulator-nettside.png",
+      tags: ["HTML", "CSS", "JavaScript"],
+      link: "https://web-kalkulator-skole.vercel.app"
+    },
+    {
       title: "AI Prosjekt - Gervi Labs",
       description: "Et AI-prosjekt i samarbeid med Gervi Labs, fokusert på kunstig intelligens og maskinlæring.",
       image: "/images/gervi-nettside.png",
@@ -358,10 +365,7 @@ export default function Home() {
               </div>
             </div>
             
-            {/* Birthday Countdown */}
-            <div className="mt-16 animate-fadeIn">
-              <BirthdayCountdown />
-            </div>
+            {/* Removed duplicated birthday countdown */}
           </section>
         )}
 
