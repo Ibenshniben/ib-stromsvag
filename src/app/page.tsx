@@ -16,19 +16,16 @@ import {
   FileText, 
   Mail, 
   Phone, 
-  Copy, 
   Instagram, 
   Github, 
   Linkedin, 
   ExternalLink, 
   Code, 
-  FileCode, 
   Database, 
   Globe, 
   PenTool,
   Menu,
   X,
-  ChevronDown,
   ChevronUp,
   User,
   Star,
@@ -71,7 +68,7 @@ export default function Home() {
 
   // Section icons mapping
   const sectionIcons = {
-    home: HomeIcon, // Make sure this is using HomeIcon, not Home
+    home: HomeIcon,
     projects: Briefcase,
     cv: FileText,
     contact: Mail
@@ -86,11 +83,9 @@ export default function Home() {
 
   // Initial page load animation
   useEffect(() => {
-    // Register ScrollTrigger plugin
     gsap.registerPlugin(ScrollTrigger)
     
     const ctx = gsap.context(() => {
-      // Animate navigation
       gsap.from('nav', { 
         y: -50, 
         opacity: 0, 
@@ -102,7 +97,6 @@ export default function Home() {
     
     return () => {
       ctx.revert()
-      // Clean up ScrollTrigger instances
       ScrollTrigger.getAll().forEach(trigger => trigger.kill())
     }
   }, [])
@@ -148,7 +142,6 @@ export default function Home() {
               height={40} 
               className="rounded-full"
             />
-            {/* Removed the IB text */}
           </Link>
           
           {/* Desktop Navigation */}
@@ -229,171 +222,157 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Content Sections - All sections in one container */}
+      {/* Content Sections */}
       <div className="pt-24 px-4 min-h-[calc(100vh-80px)]">
         <PageTransition activeSection={activeSection}>
-          {/* Home Section */}
+          {/* Home Section - Streamlined */}
           {activeSection === 'home' && (
-            <section className="max-w-6xl mx-auto py-8 md:py-20">
-              <ScrollAnimation delay={0.2} className="w-full">
-                <div>
-                  <h1 className="text-3xl md:text-6xl font-bold mb-4">
-                    Hei, jeg er <span className="bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text">Ib Strømsvåg</span>
-                  </h1>
-                  <p className="text-lg md:text-xl text-gray-300 mb-6">
-                    Jeg er en ung utvikler med lidenskap for webutvikling og design.
-                  </p>
-                  
-                  {/* Removing the animated paragraph box */}
-                  
-                  {/* Birthday Countdown moved here */}
-                  <div className="mb-6">
-                    <BirthdayCountdown />
-                  </div>
-                  
-                  <div className="flex flex-wrap gap-4">
-                    <button 
-                      onClick={() => handleSectionChange('projects')}
-                      className="bg-blue-600 hover:bg-blue-700 px-5 py-3 rounded-lg flex items-center gap-2 transition-all transform hover:scale-105 touch-manipulation"
-                    >
-                      Se mine prosjekter <ArrowRight size={16} />
-                    </button>
-                    <button 
-                      onClick={() => handleSectionChange('contact')}
-                      className="bg-gray-800/60 hover:bg-gray-700 border border-gray-600 px-5 py-3 rounded-lg flex items-center gap-2 transition-all transform hover:scale-105 touch-manipulation"
-                    >
-                      Kontakt meg
-                    </button>
-                  </div>
+            <section className="max-w-6xl mx-auto py-8 md:py-16">
+              {/* Hero Section with integrated countdown */}
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-8 items-center mb-12">
+                <div className="md:col-span-3">
+                  <ScrollAnimation delay={0.2}>
+                    <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4">
+                      Hei, jeg er <span className="bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text">Ib Strømsvåg</span>
+                    </h1>
+                    <p className="text-lg md:text-xl text-gray-300 mb-6">
+                      Ung utvikler med lidenskap for webutvikling, design og teknologi
+                    </p>
+                    
+                    <div className="flex flex-wrap gap-4">
+                      <button 
+                        onClick={() => handleSectionChange('projects')}
+                        className="bg-blue-600 hover:bg-blue-700 px-5 py-3 rounded-lg flex items-center gap-2 transition-all transform hover:scale-105 touch-manipulation"
+                      >
+                        Se mine prosjekter <ArrowRight size={16} />
+                      </button>
+                      <button 
+                        onClick={() => handleSectionChange('contact')}
+                        className="bg-gray-800/60 hover:bg-gray-700 border border-gray-600 px-5 py-3 rounded-lg flex items-center gap-2 transition-all transform hover:scale-105 touch-manipulation"
+                      >
+                        Kontakt meg
+                      </button>
+                    </div>
+                  </ScrollAnimation>
                 </div>
-              </ScrollAnimation>
-              {/* Profile picture section removed */}
+                
+                <div className="md:col-span-2">
+                  <ScrollAnimation delay={0.4}>
+                    <BirthdayCountdown />
+                  </ScrollAnimation>
+                </div>
+              </div>
               
-              {/* Skills Bento Grid */}
-              <div className="mt-12 md:mt-16">
+              {/* Skills Section - Consolidated */}
+              <div className="mb-16">
                 <ScrollAnimation delay={0.3}>
                   <h2 className="text-xl md:text-3xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-white text-transparent bg-clip-text">
                     Mine ferdigheter
                   </h2>
                 </ScrollAnimation>
                 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-                  {/* Web Development Card */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {/* Web Development */}
                   <ScrollAnimation delay={0.4} className="h-full">
-                    <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 rounded-xl p-5 md:p-6 backdrop-blur-sm border border-gray-700/30 hover:border-blue-500/30 transition-all shadow-xl hover:shadow-blue-900/10 relative overflow-hidden">
-                      <div className="absolute -right-20 -bottom-20 w-40 h-40 bg-blue-500/5 rounded-full blur-3xl"></div>
-                      
-                      <div className="bg-blue-500/20 p-3 rounded-lg w-14 h-14 flex items-center justify-center mb-4 group-hover:bg-blue-500/30 transition-colors">
+                    <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 rounded-xl p-6 backdrop-blur-sm border border-gray-700/30 hover:border-blue-500/30 transition-all shadow-xl hover:shadow-blue-900/10 h-full">
+                      <div className="bg-blue-500/20 p-3 rounded-lg w-14 h-14 flex items-center justify-center mb-4">
                         <Code className="h-8 w-8 text-blue-400" />
                       </div>
                       
-                      <h3 className="text-xl font-bold text-blue-400 mb-2">Webutvikling</h3>
-                      <p className="text-gray-300 text-sm md:text-base">HTML, CSS, JavaScript, React, Next.js, Tailwind CSS</p>
+                      <h3 className="text-xl font-bold text-blue-400 mb-2">Frontend</h3>
+                      <p className="text-gray-300">HTML, CSS, JavaScript, React, Next.js, Tailwind CSS</p>
                     </div>
                   </ScrollAnimation>
                   
-                  {/* Backend Development Card */}
+                  {/* Backend */}
                   <ScrollAnimation delay={0.5} className="h-full">
-                    <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 rounded-xl p-5 md:p-6 backdrop-blur-sm border border-gray-700/30 hover:border-purple-500/30 transition-all shadow-xl hover:shadow-purple-900/10 relative overflow-hidden group h-full">
-                      <div className="absolute -right-20 -bottom-20 w-40 h-40 bg-purple-500/5 rounded-full blur-3xl"></div>
-                      
-                      <div className="bg-purple-500/20 p-3 rounded-lg w-14 h-14 flex items-center justify-center mb-4 group-hover:bg-purple-500/30 transition-colors">
+                    <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 rounded-xl p-6 backdrop-blur-sm border border-gray-700/30 hover:border-purple-500/30 transition-all shadow-xl hover:shadow-purple-900/10 h-full">
+                      <div className="bg-purple-500/20 p-3 rounded-lg w-14 h-14 flex items-center justify-center mb-4">
                         <Database className="h-8 w-8 text-purple-400" />
                       </div>
                       
                       <h3 className="text-xl font-bold text-purple-400 mb-2">Backend</h3>
-                      <p className="text-gray-300 text-sm md:text-base">Node.js, Express, API-utvikling, Grunnleggende databasekunnskap</p>
+                      <p className="text-gray-300">Node.js, Express, API-utvikling, Databaser</p>
                     </div>
                   </ScrollAnimation>
                   
-                  {/* Design Card */}
+                  {/* Design */}
                   <ScrollAnimation delay={0.6} className="h-full">
-                    <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 rounded-xl p-5 md:p-6 backdrop-blur-sm border border-gray-700/30 hover:border-green-500/30 transition-all shadow-xl hover:shadow-green-900/10 relative overflow-hidden group h-full">
-                      <div className="absolute -right-20 -bottom-20 w-40 h-40 bg-green-500/5 rounded-full blur-3xl"></div>
-                      
-                      <div className="bg-green-500/20 p-3 rounded-lg w-14 h-14 flex items-center justify-center mb-4 group-hover:bg-green-500/30 transition-colors">
+                    <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 rounded-xl p-6 backdrop-blur-sm border border-gray-700/30 hover:border-green-500/30 transition-all shadow-xl hover:shadow-green-900/10 h-full">
+                      <div className="bg-green-500/20 p-3 rounded-lg w-14 h-14 flex items-center justify-center mb-4">
                         <PenTool className="h-8 w-8 text-green-400" />
                       </div>
                       
                       <h3 className="text-xl font-bold text-green-400 mb-2">Design</h3>
-                      <p className="text-gray-300 text-sm md:text-base">UI/UX Design, Figma, Responsive Design, Brukervennlighet</p>
-                    </div>
-                  </ScrollAnimation>
-                </div>
-                
-                {/* Additional Skills Row */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4 md:mt-6">
-                  {/* Soft Skills Card */}
-                  <ScrollAnimation delay={0.7}>
-                    <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 rounded-xl p-5 md:p-6 backdrop-blur-sm border border-gray-700/30 hover:border-yellow-500/30 transition-all shadow-xl hover:shadow-yellow-900/10 relative overflow-hidden group">
-                      <div className="absolute -right-20 -bottom-20 w-40 h-40 bg-yellow-500/5 rounded-full blur-3xl"></div>
-                      
-                      <h3 className="text-xl font-bold text-yellow-400 mb-2">Personlige egenskaper</h3>
-                      <ul className="text-gray-300 list-disc list-inside space-y-1 text-sm md:text-base">
-                        <li>Problemløsning</li>
-                        <li>Kreativ tenkning</li>
-                        <li>Samarbeidsvillig</li>
-                        <li>Lærevillig og tilpasningsdyktig</li>
-                      </ul>
-                    </div>
-                  </ScrollAnimation>
-                  
-                  {/* About Me Card */}
-                  <ScrollAnimation delay={0.8}>
-                    <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 rounded-xl p-5 md:p-6 backdrop-blur-sm border border-gray-700/30 hover:border-blue-500/30 transition-all shadow-xl hover:shadow-blue-900/10 relative overflow-hidden">
-                      <div className="absolute -right-20 -bottom-20 w-40 h-40 bg-blue-500/5 rounded-full blur-3xl"></div>
-                      
-                      <h3 className="text-xl font-bold text-blue-400 mb-2">Om meg</h3>
-                      <p className="text-gray-300 text-sm md:text-base">
-                        Jeg er en ung utvikler med stor interesse for teknologi og webutvikling. 
-                        Jeg liker å lære nye ting og holder meg oppdatert på de nyeste trendene innen webutvikling.
-                      </p>
+                      <p className="text-gray-300">UI/UX Design, Figma, Responsive Design</p>
                     </div>
                   </ScrollAnimation>
                 </div>
               </div>
               
-              {/* Line-by-line animated text reveal */}
-              <div className="mt-12 md:mt-16 max-w-3xl mx-auto">
-                <ScrollAnimation delay={0.2}>
-                  <h2 className="text-xl md:text-3xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-white text-transparent bg-clip-text">
-                    Min reise som utvikler
-                  </h2>
-                </ScrollAnimation>
-                
-                <div className="space-y-3">
-                  {[
-                    "Jeg er en passionert Full Stack Web Developer med ekspertise i moderne web teknologier.",
-                    "Min reise innen webutvikling startet med en nysgjerrighet for å skape interaktive opplevelser.",
-                    "Jeg har gradvis utviklet mine ferdigheter gjennom praktiske prosjekter og kontinuerlig læring.",
-                    "Jeg trives med å lære nye teknologier og implementere kreative løsninger på komplekse problemer.",
-                    "Min tilnærming til utvikling kombinerer teknisk presisjon med et øye for design og brukervennlighet."
-                  ].map((line, index) => (
-                    <ScrollAnimation 
-                      key={index} 
-                      delay={0.3 + index * 0.1} 
-                      className="block"
-                      customAnimation={{
-                        hidden: { y: 20, x: -5, opacity: 0, rotateZ: -1, filter: "blur(3px)" },
-                        visible: { 
-                          y: 0, 
-                          x: 0, 
-                          opacity: 1, 
-                          rotateZ: 0, 
-                          filter: "blur(0px)",
-                          transition: { 
-                            duration: 0.5, 
-                            ease: "easeOut",
-                            delay: 0.3 + index * 0.1
-                          }
-                        }
-                      }}
-                    >
-                      <p className="text-gray-300 leading-relaxed">{line}</p>
-                    </ScrollAnimation>
-                  ))}
+              {/* About Me - Consolidated */}
+              <ScrollAnimation delay={0.7}>
+                <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 rounded-xl p-6 backdrop-blur-sm border border-gray-700/30 mb-16">
+                  <h2 className="text-xl md:text-2xl font-bold mb-4 text-blue-400">Om meg</h2>
+                  <p className="text-gray-300 mb-4">
+                    Jeg er en ung utvikler med stor interesse for teknologi og webutvikling. 
+                    Jeg liker å lære nye ting og holder meg oppdatert på de nyeste trendene innen webutvikling.
+                  </p>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div>
+                      <h3 className="text-lg font-semibold text-blue-300 mb-2">Personlige egenskaper</h3>
+                      <ul className="text-gray-300 list-inside space-y-1">
+                        <li className="flex items-center gap-2">
+                          <span className="text-blue-400">•</span>
+                          <span>Problemløsning</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="text-blue-400">•</span>
+                          <span>Kreativ tenkning</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="text-blue-400">•</span>
+                          <span>Samarbeidsvillig</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="text-blue-400">•</span>
+                          <span>Lærevillig og tilpasningsdyktig</span>
+                        </li>
+                      </ul>
+                    </div>
+                    
+                    <div>
+                      <h3 className="text-lg font-semibold text-blue-300 mb-2">Min tilnærming</h3>
+                      <p className="text-gray-300">
+                        Jeg kombinerer teknisk presisjon med et øye for design og brukervennlighet. 
+                        Min reise innen webutvikling startet med en nysgjerrighet for å skape interaktive opplevelser.
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </ScrollAnimation>
+              
+              {/* Featured Projects Preview */}
+              <ScrollAnimation delay={0.8}>
+                <div className="mb-8">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-xl md:text-2xl font-bold text-blue-400">Utvalgte prosjekter</h2>
+                    <button 
+                      onClick={() => handleSectionChange('projects')}
+                      className="text-blue-400 hover:text-blue-300 flex items-center gap-1 text-sm"
+                    >
+                      Se alle <ArrowRight size={14} />
+                    </button>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {projects.slice(0, 2).map((project, index) => (
+                      <ProjectCard key={index} {...project} />
+                    ))}
+                  </div>
+                </div>
+              </ScrollAnimation>
             </section>
           )}
 
