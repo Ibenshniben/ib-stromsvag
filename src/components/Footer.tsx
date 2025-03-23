@@ -3,36 +3,47 @@ import Link from 'next/link'
 import { Mail, Linkedin, Globe, Github } from 'lucide-react'
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear()
+  
   return (
-    <footer className="w-full bg-black/60 backdrop-blur-md border-t border-gray-800/50">
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="flex flex-col items-center gap-6">
-          <Image
-            src="/images/ib-logo-hvit.png"
-            alt="IB Logo"
-            width={50}
-            height={50}
-            className="rounded-full hover:scale-110 transition-transform"
-          />
-          
-          <div className="flex gap-8 text-gray-400">
-            <Link href="mailto:ibjulian9@gmail.com" className="hover:text-blue-400 transition-colors flex items-center gap-2">
-              <Mail size={16} />
-              Email
+    <footer className="bg-[#0a192f]/80 backdrop-blur-md border-t border-gray-800 py-8 mt-12">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="flex flex-col md:flex-row justify-between items-center">
+          <div className="mb-6 md:mb-0">
+            <Link href="/" className="flex items-center gap-2">
+              <Image 
+                src="/images/ib-logo-hvit.png" 
+                alt="IB Logo" 
+                width={40} 
+                height={40} 
+                className="rounded-full"
+              />
+              <span className="text-xl font-bold">Ib Strømsvåg</span>
             </Link>
-            <Link href="https://linkedin.com/in/ib-strømsvåg" target="_blank" className="hover:text-blue-400 transition-colors flex items-center gap-2">
-              <Linkedin size={16} />
-              LinkedIn
-            </Link>
-            <Link href="https://ibstromsvag.com" target="_blank" className="hover:text-blue-400 transition-colors flex items-center gap-2">
-              <Globe size={16} />
-              Portfolio
-            </Link>
+            <p className="text-gray-400 mt-2 text-sm">
+              Webutvikler og designentusiast
+            </p>
           </div>
           
-          <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} Ib Strømsvåg. All rights reserved.
-          </p>
+          <div className="flex flex-col items-center md:items-end">
+            <div className="flex gap-4 mb-4">
+              <a href="mailto:ibjulian9@gmail.com" className="text-gray-400 hover:text-white transition-colors">
+                <Mail className="h-5 w-5" />
+              </a>
+              <a href="https://github.com/ibstromsvag" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+                <Github className="h-5 w-5" />
+              </a>
+              <a href="https://linkedin.com/in/ib-strømsvåg" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+                <Linkedin className="h-5 w-5" />
+              </a>
+              <a href="https://ibstromsvag.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+                <Globe className="h-5 w-5" />
+              </a>
+            </div>
+            <p className="text-gray-500 text-sm">
+              © {currentYear} Ib Strømsvåg. Alle rettigheter reservert.
+            </p>
+          </div>
         </div>
       </div>
     </footer>
