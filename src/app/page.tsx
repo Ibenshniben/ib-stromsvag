@@ -200,7 +200,10 @@ export default function Home() {
                   return (
                     <li key={section} className="w-full text-center">
                       <button 
-                        onClick={() => handleSectionChange(sectionKey)}
+                        onClick={() => {
+                          handleSectionChange(sectionKey);
+                          setMobileMenuOpen(false);
+                        }}
                         className={`
                           px-6 py-3 transition-colors flex items-center justify-center gap-3
                           ${activeSection === sectionKey 
