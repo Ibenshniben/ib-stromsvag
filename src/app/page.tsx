@@ -7,6 +7,7 @@ import ProjectCard from '@/components/ProjectCard'
 import BirthdayCountdown from '@/components/BirthdayCountdown'
 import Footer from '@/components/Footer'
 import ScrollAnimation from '@/components/ScrollAnimation'
+import TiltCard from '@/components/TiltCard'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { 
@@ -277,83 +278,91 @@ export default function Home() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {/* Web Development */}
                   <ScrollAnimation delay={0.4} className="h-full">
-                    <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 rounded-xl p-6 backdrop-blur-sm border border-gray-700/30 hover:border-blue-500/30 transition-all shadow-xl hover:shadow-blue-900/10 h-full">
-                      <div className="bg-blue-500/20 p-3 rounded-lg w-14 h-14 flex items-center justify-center mb-4">
-                        <Code className="h-8 w-8 text-blue-400" />
+                    <TiltCard className="h-full">
+                      <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 rounded-xl p-6 backdrop-blur-sm border border-gray-700/30 hover:border-blue-500/30 transition-all shadow-xl hover:shadow-blue-900/10 h-full">
+                        <div className="bg-blue-500/20 p-3 rounded-lg w-14 h-14 flex items-center justify-center mb-4">
+                          <Code className="h-8 w-8 text-blue-400" />
+                        </div>
+                        
+                        <h3 className="text-xl font-bold text-blue-400 mb-2">Frontend</h3>
+                        <p className="text-gray-300">HTML, CSS, JavaScript, React, Next.js, Tailwind CSS</p>
                       </div>
-                      
-                      <h3 className="text-xl font-bold text-blue-400 mb-2">Frontend</h3>
-                      <p className="text-gray-300">HTML, CSS, JavaScript, React, Next.js, Tailwind CSS</p>
-                    </div>
+                    </TiltCard>
                   </ScrollAnimation>
                   
                   {/* Backend */}
                   <ScrollAnimation delay={0.5} className="h-full">
-                    <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 rounded-xl p-6 backdrop-blur-sm border border-gray-700/30 hover:border-purple-500/30 transition-all shadow-xl hover:shadow-purple-900/10 h-full">
-                      <div className="bg-purple-500/20 p-3 rounded-lg w-14 h-14 flex items-center justify-center mb-4">
-                        <Database className="h-8 w-8 text-purple-400" />
+                    <TiltCard className="h-full">
+                      <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 rounded-xl p-6 backdrop-blur-sm border border-gray-700/30 hover:border-purple-500/30 transition-all shadow-xl hover:shadow-purple-900/10 h-full">
+                        <div className="bg-purple-500/20 p-3 rounded-lg w-14 h-14 flex items-center justify-center mb-4">
+                          <Database className="h-8 w-8 text-purple-400" />
+                        </div>
+                        
+                        <h3 className="text-xl font-bold text-purple-400 mb-2">Backend</h3>
+                        <p className="text-gray-300">Node.js, Express, API-utvikling, Databaser</p>
                       </div>
-                      
-                      <h3 className="text-xl font-bold text-purple-400 mb-2">Backend</h3>
-                      <p className="text-gray-300">Node.js, Express, API-utvikling, Databaser</p>
-                    </div>
+                    </TiltCard>
                   </ScrollAnimation>
                   
                   {/* Design */}
                   <ScrollAnimation delay={0.6} className="h-full">
-                    <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 rounded-xl p-6 backdrop-blur-sm border border-gray-700/30 hover:border-green-500/30 transition-all shadow-xl hover:shadow-green-900/10 h-full">
-                      <div className="bg-green-500/20 p-3 rounded-lg w-14 h-14 flex items-center justify-center mb-4">
-                        <PenTool className="h-8 w-8 text-green-400" />
+                    <TiltCard className="h-full">
+                      <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 rounded-xl p-6 backdrop-blur-sm border border-gray-700/30 hover:border-green-500/30 transition-all shadow-xl hover:shadow-green-900/10 h-full">
+                        <div className="bg-green-500/20 p-3 rounded-lg w-14 h-14 flex items-center justify-center mb-4">
+                          <PenTool className="h-8 w-8 text-green-400" />
+                        </div>
+                        
+                        <h3 className="text-xl font-bold text-green-400 mb-2">Design</h3>
+                        <p className="text-gray-300">UI/UX Design, Figma, Responsive Design</p>
                       </div>
-                      
-                      <h3 className="text-xl font-bold text-green-400 mb-2">Design</h3>
-                      <p className="text-gray-300">UI/UX Design, Figma, Responsive Design</p>
-                    </div>
+                    </TiltCard>
                   </ScrollAnimation>
                 </div>
               </div>
               
               {/* About Me - Consolidated */}
               <ScrollAnimation delay={0.7}>
-                <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 rounded-xl p-6 backdrop-blur-sm border border-gray-700/30 mb-16">
-                  <h2 className="text-xl md:text-2xl font-bold mb-4 text-blue-400">Om meg</h2>
-                  <p className="text-gray-300 mb-4">
-                    Jeg er en ung utvikler med stor interesse for teknologi og webutvikling. 
-                    Jeg liker å lære nye ting og holder meg oppdatert på de nyeste trendene innen webutvikling.
-                  </p>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                    <div>
-                      <h3 className="text-lg font-semibold text-blue-300 mb-2">Personlige egenskaper</h3>
-                      <ul className="text-gray-300 list-inside space-y-1">
-                        <li className="flex items-center gap-2">
-                          <span className="text-blue-400">•</span>
-                          <span>Problemløsning</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-blue-400">•</span>
-                          <span>Kreativ tenkning</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-blue-400">•</span>
-                          <span>Samarbeidsvillig</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-blue-400">•</span>
-                          <span>Lærevillig og tilpasningsdyktig</span>
-                        </li>
-                      </ul>
-                    </div>
+                <TiltCard>
+                  <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 rounded-xl p-6 backdrop-blur-sm border border-gray-700/30 mb-16">
+                    <h2 className="text-xl md:text-2xl font-bold mb-4 text-blue-400">Om meg</h2>
+                    <p className="text-gray-300 mb-4">
+                      Jeg er en ung utvikler med stor interesse for teknologi og webutvikling. 
+                      Jeg liker å lære nye ting og holder meg oppdatert på de nyeste trendene innen webutvikling.
+                    </p>
                     
-                    <div>
-                      <h3 className="text-lg font-semibold text-blue-300 mb-2">Min tilnærming</h3>
-                      <p className="text-gray-300">
-                        Jeg kombinerer teknisk presisjon med et øye for design og brukervennlighet. 
-                        Min reise innen webutvikling startet med en nysgjerrighet for å skape interaktive opplevelser.
-                      </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                      <div>
+                        <h3 className="text-lg font-semibold text-blue-300 mb-2">Personlige egenskaper</h3>
+                        <ul className="text-gray-300 list-inside space-y-1">
+                          <li className="flex items-center gap-2">
+                            <span className="text-blue-400">•</span>
+                            <span>Problemløsning</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <span className="text-blue-400">•</span>
+                            <span>Kreativ tenkning</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <span className="text-blue-400">•</span>
+                            <span>Samarbeidsvillig</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <span className="text-blue-400">•</span>
+                            <span>Lærevillig og tilpasningsdyktig</span>
+                          </li>
+                        </ul>
+                      </div>
+                      
+                      <div>
+                        <h3 className="text-lg font-semibold text-blue-300 mb-2">Min tilnærming</h3>
+                        <p className="text-gray-300">
+                          Jeg kombinerer teknisk presisjon med et øye for design og brukervennlighet. 
+                          Min reise innen webutvikling startet med en nysgjerrighet for å skape interaktive opplevelser.
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </TiltCard>
               </ScrollAnimation>
               
               {/* Featured Projects Preview */}

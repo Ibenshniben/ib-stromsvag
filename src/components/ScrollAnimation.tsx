@@ -23,8 +23,8 @@ export default function ScrollAnimation({ children, delay = 0, className = '' }:
       // Set initial state - blurred and transparent
       gsap.set(element, { 
         opacity: 0,
-        filter: 'blur(10px)',
-        y: 30
+        filter: 'blur(5px)', // Reduced blur amount
+        y: 20 // Reduced y offset
       })
       
       // Create animation
@@ -32,20 +32,22 @@ export default function ScrollAnimation({ children, delay = 0, className = '' }:
         opacity: 1,
         filter: 'blur(0px)',
         y: 0,
-        duration: 0.8,
+        duration: 0.6, // Faster duration
         delay: delay,
         ease: 'power2.out',
         scrollTrigger: {
           trigger: element,
-          start: 'top 85%', // when the top of the element hits 85% from the top of viewport
+          start: 'top 90%', // Trigger earlier
           toggleActions: 'play none none none'
         }
       })
     }
     
+    // Cleanup
     return () => {
-      // Clean up ScrollTrigger instances
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill())
+      if (ScrollTrigger.getAll().length > 0) {
+        ScrollTrigger.getAll().forEach(trigger => trigger.kill())
+      }
     }
   }, [delay])
 
