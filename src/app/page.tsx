@@ -20,7 +20,7 @@ import {
   Instagram, 
   Github, 
   Linkedin, 
-  ExternalLink, 
+  // ExternalLink removed here
   Code, 
   Database, 
   Globe, 

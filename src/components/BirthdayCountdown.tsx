@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Calendar, Clock, Gift } from 'lucide-react'
+import { Calendar } from 'lucide-react'
 
 export default function BirthdayCountdown() {
   const [timeLeft, setTimeLeft] = useState({

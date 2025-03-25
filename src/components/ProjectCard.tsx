@@ -1,8 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
-// Remove Link import if not used
+// Link import removed
 import { ExternalLink } from 'lucide-react';
-// Remove ArrowRight import if not used
+// ArrowRight import removed
 import TiltCard from './TiltCard';
 
 interface ProjectCardProps {
