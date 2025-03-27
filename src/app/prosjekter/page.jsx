@@ -27,6 +27,14 @@ export default function Prosjekter() {
     },
     {
       id: 3,
+      title: 'Squash Klubb',
+      description: 'En fullstendig nettside for en squashklubb med booking-system og medlemshåndtering.',
+      image: '/images/squash-nettside.png',
+      tags: ['Next.js', 'Prisma', 'SQL', 'Railway'],
+      link: 'https://squash-nettside.vercel.app/'
+    },
+    {
+      id: 4,
       title: 'AI Prosjekt - GenAI Labs',
       description: 'Et AI-prosjekt i samarbeid med GenAI Labs, fokusert på maskinlæring og chatbots.',
       image: '/images/ai-project.jpg',

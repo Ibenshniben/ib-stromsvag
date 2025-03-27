@@ -52,6 +52,13 @@ export default function Home() {
       link: "https://vikings-nettside.vercel.app"
     },
     {
+      title: "Squash Klubb",
+      description: "En fullstendig nettside for en squashklubb med booking-system og medlemshåndtering.",
+      image: "/images/squash-nettside.png",
+      tags: ["Next.js", "Prisma", "SQL", "Railway"],
+      link: "https://squash-nettside.vercel.app/"
+    },
+    {
       title: "Fakultet Kalkulator",
       description: "En kalkulator som beregner fakultet av tall. Utviklet med HTML, CSS og JavaScript.",
       image: "/images/fakultet-kalkulator-nettside.png",
