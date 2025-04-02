@@ -4,41 +4,33 @@ import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import ProjectCard from '@/components/ProjectCard'
-import BirthdayCountdown from '@/components/BirthdayCountdown'
+import BentoGrid, { BentoItem } from '@/components/BentoGrid'
 import Footer from '@/components/Footer'
 import ScrollAnimation from '@/components/ScrollAnimation'
 import TiltCard from '@/components/TiltCard'
+import Navbar from '@/components/Navbar'
+import RollingGallery from '@/components/RollingGallery'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { 
+  ArrowDown, 
   ArrowRight, 
-  Home as HomeIcon,
-  Briefcase, 
-  FileText, 
-  Mail, 
-  Phone, 
-  Instagram, 
+  Code, 
+  ExternalLink, 
   Github, 
   Linkedin, 
-  // ExternalLink removed here
-  Code, 
-  Database, 
-  Globe, 
+  Mail,
+  Database,
   PenTool,
-  Menu,
-  X,
-  ChevronUp,
   User,
-  Star,
   GraduationCap,
-  BookOpen,
-  Users
+  Calendar,
+  ChevronDown
 } from 'lucide-react'
 import PageTransition from '@/components/PageTransition'
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState('home')
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [showScrollButton, setShowScrollButton] = useState(false)
   const pageRef = useRef(null)
   
@@ -74,18 +66,9 @@ export default function Home() {
     }
   ]
 
-  // Section icons mapping
-  const sectionIcons = {
-    home: HomeIcon,
-    projects: Briefcase,
-    cv: FileText,
-    contact: Mail
-  }
-
   // Handle section change
   const handleSectionChange = (section: string) => {
     setActiveSection(section)
-    setMobileMenuOpen(false)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -94,12 +77,54 @@ export default function Home() {
     gsap.registerPlugin(ScrollTrigger)
     
     const ctx = gsap.context(() => {
-      gsap.from('nav', { 
-        y: -50, 
+      // Hero section animation
+      gsap.from('.hero-title', { 
+        y: -30, 
+        opacity: 0, 
+        duration: 1, 
+        ease: 'power3.out',
+      })
+      
+      gsap.from('.hero-subtitle', { 
+        y: -20, 
+        opacity: 0, 
+        duration: 1, 
+        ease: 'power3.out',
+        delay: 0.3
+      })
+      
+      gsap.from('.scroll-indicator', { 
+        y: -10, 
+        opacity: 0, 
+        duration: 1, 
+        ease: 'power3.out',
+        delay: 0.6
+      })
+      
+      // Staggered animation for bento grid items
+      gsap.from('.bento-item', { 
+        y: 50, 
         opacity: 0, 
         duration: 0.8, 
         ease: 'power3.out',
-        delay: 0.2
+        stagger: 0.1,
+        delay: 1,
+        scrollTrigger: {
+          trigger: '.bento-grid',
+          start: 'top bottom-=100',
+        }
+      })
+      
+      // Gallery animation
+      gsap.from('.gallery-section', { 
+        y: 50, 
+        opacity: 0, 
+        duration: 0.8, 
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '.gallery-section',
+          start: 'top bottom-=100',
+        }
       })
     }, pageRef)
     
@@ -107,7 +132,7 @@ export default function Home() {
       ctx.revert()
       ScrollTrigger.getAll().forEach(trigger => trigger.kill())
     }
-  }, [])
+  }, [activeSection])
 
   // Scroll to top button visibility
   useEffect(() => {
@@ -119,689 +144,348 @@ export default function Home() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Scroll to top function
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
-
   return (
     <main ref={pageRef} className="min-h-screen bg-[#0a192f] text-white relative">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#0a192f] to-[#020c1b] pointer-events-none"></div>
-      {/* Scroll to top button */}
-      {showScrollButton && (
-        <button 
-          onClick={scrollToTop}
-          className="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 p-3 rounded-full shadow-lg transition-all z-50"
-          aria-label="Scroll to top"
-        >
-          <ChevronUp className="h-6 w-6" />
-        </button>
-      )}
       
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 bg-[#0a192f]/90 backdrop-blur-md z-50 border-b border-gray-800">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-          <Link href="/" className="text-xl font-bold text-white flex items-center gap-2">
-            <Image 
-              src="/images/ib-logo-hvit.png" 
-              alt="IB Logo" 
-              width={40} 
-              height={40} 
-              className="rounded-full"
-            />
-          </Link>
+      {/* Custom Navbar that matches the image */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[#0a192f]/90 backdrop-blur-sm py-4 px-4">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          {/* Logo */}
+          <div className="bg-blue-600 text-white px-3 py-1 rounded-md font-bold text-sm">
+            IB STRØMSVÅG
+          </div>
           
-          {/* Desktop Navigation */}
-          <ul className="hidden md:flex space-x-8">
-            {['hjem', 'prosjekter', 'cv', 'kontakt'].map((section) => {
-              const sectionKey = section === 'hjem' ? 'home' : 
-                                section === 'prosjekter' ? 'projects' : 
-                                section === 'cv' ? 'cv' : 'contact';
-              const IconComponent = sectionIcons[sectionKey as keyof typeof sectionIcons];
-              return (
-                <li key={section}>
-                  <button 
-                    onClick={() => handleSectionChange(sectionKey)}
-                    className={`
-                      px-2 py-1 transition-colors flex items-center gap-2 relative
-                      ${activeSection === sectionKey 
-                        ? 'text-blue-400' 
-                        : 'hover:text-blue-300'
-                      }
-                      after:content-[''] after:absolute after:left-0 after:bottom-0
-                      after:h-[2px] after:bg-blue-400 after:transition-all
-                      ${activeSection === sectionKey ? 'after:w-full' : 'after:w-0'}
-                      hover:after:w-full
-                    `}
-                  >
-                    <IconComponent size={16} />
-                    {section.charAt(0).toUpperCase() + section.slice(1)}
-                  </button>
-                </li>
-              )
-            })}
-          </ul>
+          {/* Navigation */}
+          <div className="bg-[#172a46] rounded-full px-2 py-1 hidden md:flex">
+            {['Home', 'Projects', 'CV', 'Contact'].map((item) => (
+              <button
+                key={item.toLowerCase()}
+                onClick={() => handleSectionChange(item.toLowerCase())}
+                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                  activeSection === item.toLowerCase() 
+                    ? 'bg-blue-600 text-white shadow-sm' 
+                    : 'text-gray-300 hover:text-white'
+                }`}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
           
-          {/* Mobile Menu Button */}
-          <button 
-            className="md:hidden z-20 p-2 touch-manipulation"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? (
-              <X className="h-6 w-6 text-white" />
-            ) : (
-              <Menu className="h-6 w-6 text-white" />
-            )}
-          </button>
-          
-          {/* Mobile Menu Overlay */}
-          {mobileMenuOpen && (
-            <div className="fixed inset-0 bg-black/90 z-10 flex flex-col items-center justify-center">
-              <ul className="flex flex-col space-y-4 items-center w-full px-6 max-h-[80vh] overflow-y-auto">
-                {['hjem', 'prosjekter', 'cv', 'kontakt'].map((section) => {
-                  const sectionKey = section === 'hjem' ? 'home' : 
-                                    section === 'prosjekter' ? 'projects' : 
-                                    section === 'cv' ? 'cv' : 'contact';
-                  const IconComponent = sectionIcons[sectionKey as keyof typeof sectionIcons];
-                  return (
-                    <li key={section} className="w-full text-center">
-                      <button 
-                        onClick={() => {
-                          handleSectionChange(sectionKey);
-                          setMobileMenuOpen(false);
-                        }}
-                        className={`
-                          px-6 py-3 transition-colors flex items-center justify-center gap-3
-                          ${activeSection === sectionKey 
-                            ? 'text-blue-400 bg-blue-900/20' 
-                            : 'text-white hover:bg-gray-800/50'
-                          }
-                          w-full rounded-lg touch-manipulation text-lg
-                        `}
-                      >
-                        <IconComponent size={20} />
-                        {section.charAt(0).toUpperCase() + section.slice(1)}
-                      </button>
-                    </li>
-                  )
-                })}
-              </ul>
-            </div>
-          )}
+          {/* Right side buttons */}
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => handleSectionChange('contact')}
+              className="px-3 py-1.5 rounded-full text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+            >
+              Contact
+            </button>
+          </div>
         </div>
-      </nav>
-
-      {/* Content Sections */}
-      <div className="pt-24 px-4 min-h-[calc(100vh-80px)]">
+      </header>
+      
+      <div className="pt-24 px-4 pb-16 max-w-7xl mx-auto">
         <PageTransition activeSection={activeSection}>
-          {/* Home Section - Streamlined */}
+          {/* Home Content */}
           {activeSection === 'home' && (
-            <section className="max-w-6xl mx-auto py-8 md:py-16">
-              {/* Hero Section with integrated countdown */}
-              <div className="grid grid-cols-1 md:grid-cols-5 gap-8 items-center mb-12">
-                <div className="md:col-span-3">
-                  <ScrollAnimation delay={0.2}>
-                    <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4">
-                      Hei, jeg er <span className="bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text">Ib Strømsvåg</span>
-                    </h1>
-                    <p className="text-lg md:text-xl text-gray-300 mb-6">
-                      Ung utvikler med lidenskap for webutvikling, design og teknologi
-                    </p>
-                    
-                    <div className="flex flex-wrap gap-4">
-                      <button 
-                        onClick={() => handleSectionChange('projects')}
-                        className="bg-blue-600 hover:bg-blue-700 px-5 py-3 rounded-lg flex items-center gap-2 transition-all transform hover:scale-105 touch-manipulation"
-                      >
-                        Se mine prosjekter <ArrowRight size={16} />
-                      </button>
-                      <button 
-                        onClick={() => handleSectionChange('contact')}
-                        className="bg-gray-800/60 hover:bg-gray-700 border border-gray-600 px-5 py-3 rounded-lg flex items-center gap-2 transition-all transform hover:scale-105 touch-manipulation"
-                      >
-                        Kontakt meg
-                      </button>
-                    </div>
-                  </ScrollAnimation>
+            <section>
+              {/* Hero Section - Full height with centered content */}
+              <div className="min-h-[80vh] flex flex-col md:flex-row justify-center items-center mb-16 relative">
+                {/* Background image */}
+                <div className="absolute inset-0 z-0">
+                  <Image 
+                    src="/images/ib-bilde1.jpeg" 
+                    alt="Ib Strømsvåg" 
+                    fill
+                    style={{ objectFit: 'cover', objectPosition: 'center' }}
+                    className="opacity-70"
+                    priority
+                  />
+                  {/* Removed the blue gradient overlay */}
                 </div>
                 
-                <div className="md:col-span-2">
-                  <ScrollAnimation delay={0.4}>
-                    <BirthdayCountdown />
-                  </ScrollAnimation>
+                {/* Left side - empty or can contain a smaller image if needed */}
+                <div className="hidden md:block md:w-3/5 relative z-10"></div>
+                
+                {/* Right side - text content - adjusted width and padding */}
+                <div className="w-full md:w-2/5 p-6 pr-8 relative z-10 text-left">
+                  <h1 className="hero-title text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text">
+                    Ib Strømsvåg
+                  </h1>
+                  <p className="hero-subtitle text-lg md:text-xl text-gray-300 max-w-md mb-8">
+                    Ung utvikler med lidenskap for webutvikling, design og teknologi
+                  </p>
+                  <div className="scroll-indicator animate-bounce">
+                    <ChevronDown className="h-6 w-6 text-blue-400" />
+                  </div>
                 </div>
               </div>
               
-              {/* Skills Section - Consolidated */}
-              <div className="mb-16">
-                <ScrollAnimation delay={0.3}>
-                  <h2 className="text-xl md:text-3xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-white text-transparent bg-clip-text">
-                    Mine ferdigheter
-                  </h2>
-                </ScrollAnimation>
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {/* Web Development */}
-                  <ScrollAnimation delay={0.4} className="h-full">
+              {/* Bento Grid */}
+              <div className="bento-grid mb-16">
+                <BentoGrid className="grid-cols-1 md:grid-cols-3 gap-6">
+                  {/* About Me */}
+                  <BentoItem colSpan={2} rowSpan={1} className="bento-item">
                     <TiltCard className="h-full">
-                      <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 rounded-xl p-6 backdrop-blur-sm border border-gray-700/30 hover:border-blue-500/30 transition-all shadow-xl hover:shadow-blue-900/10 h-full">
-                        <div className="bg-blue-500/20 p-3 rounded-lg w-14 h-14 flex items-center justify-center mb-4">
-                          <Code className="h-8 w-8 text-blue-400" />
-                        </div>
-                        
-                        <h3 className="text-xl font-bold text-blue-400 mb-2">Frontend</h3>
-                        <p className="text-gray-300">HTML, CSS, JavaScript, React, Next.js, Tailwind CSS</p>
-                      </div>
-                    </TiltCard>
-                  </ScrollAnimation>
-                  
-                  {/* Backend */}
-                  <ScrollAnimation delay={0.5} className="h-full">
-                    <TiltCard className="h-full">
-                      <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 rounded-xl p-6 backdrop-blur-sm border border-gray-700/30 hover:border-purple-500/30 transition-all shadow-xl hover:shadow-purple-900/10 h-full">
-                        <div className="bg-purple-500/20 p-3 rounded-lg w-14 h-14 flex items-center justify-center mb-4">
-                          <Database className="h-8 w-8 text-purple-400" />
-                        </div>
-                        
-                        <h3 className="text-xl font-bold text-purple-400 mb-2">Backend</h3>
-                        <p className="text-gray-300">Node.js, Express, API-utvikling, Databaser</p>
-                      </div>
-                    </TiltCard>
-                  </ScrollAnimation>
-                  
-                  {/* Design */}
-                  <ScrollAnimation delay={0.6} className="h-full">
-                    <TiltCard className="h-full">
-                      <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 rounded-xl p-6 backdrop-blur-sm border border-gray-700/30 hover:border-green-500/30 transition-all shadow-xl hover:shadow-green-900/10 h-full">
-                        <div className="bg-green-500/20 p-3 rounded-lg w-14 h-14 flex items-center justify-center mb-4">
-                          <PenTool className="h-8 w-8 text-green-400" />
-                        </div>
-                        
-                        <h3 className="text-xl font-bold text-green-400 mb-2">Design</h3>
-                        <p className="text-gray-300">UI/UX Design, Figma, Responsive Design</p>
-                      </div>
-                    </TiltCard>
-                  </ScrollAnimation>
-                </div>
-              </div>
-              
-              {/* About Me - Consolidated */}
-              <ScrollAnimation delay={0.7}>
-                <TiltCard>
-                  <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 rounded-xl p-6 backdrop-blur-sm border border-gray-700/30 mb-16">
-                    <h2 className="text-xl md:text-2xl font-bold mb-4 text-blue-400">Om meg</h2>
-                    <p className="text-gray-300 mb-4">
-                      Jeg er en ung utvikler med stor interesse for teknologi og webutvikling. 
-                      Jeg liker å lære nye ting og holder meg oppdatert på de nyeste trendene innen webutvikling.
-                    </p>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                      <div>
-                        <h3 className="text-lg font-semibold text-blue-300 mb-2">Personlige egenskaper</h3>
-                        <ul className="text-gray-300 list-inside space-y-1">
-                          <li className="flex items-center gap-2">
-                            <span className="text-blue-400">•</span>
-                            <span>Problemløsning</span>
-                          </li>
-                          <li className="flex items-center gap-2">
-                            <span className="text-blue-400">•</span>
-                            <span>Kreativ tenkning</span>
-                          </li>
-                          <li className="flex items-center gap-2">
-                            <span className="text-blue-400">•</span>
-                            <span>Samarbeidsvillig</span>
-                          </li>
-                          <li className="flex items-center gap-2">
-                            <span className="text-blue-400">•</span>
-                            <span>Lærevillig og tilpasningsdyktig</span>
-                          </li>
-                        </ul>
-                      </div>
-                      
-                      <div>
-                        <h3 className="text-lg font-semibold text-blue-300 mb-2">Min tilnærming</h3>
+                      <div className="bg-white/5 rounded-xl p-6 h-full flex flex-col backdrop-blur-sm border border-gray-700/30">
+                        <h2 className="text-2xl font-bold text-white mb-4">Om meg</h2>
                         <p className="text-gray-300">
-                          Jeg kombinerer teknisk presisjon med et øye for design og brukervennlighet. 
-                          Min reise innen webutvikling startet med en nysgjerrighet for å skape interaktive opplevelser.
+                          Jeg er en ung utvikler med stor interesse for teknologi og webutvikling. 
+                          Jeg liker å lære nye ting og holder meg oppdatert på de nyeste trendene innen webutvikling.
                         </p>
+                        <p className="text-gray-300 mt-2">
+                          IT student ved Tangen VGS i Kristiansand.
+                        </p>
+                        
+                        <div className="mt-6 grid grid-cols-2 gap-4">
+                          <div className="flex items-center gap-3">
+                            <div className="bg-blue-500/20 p-2 rounded-lg">
+                              <Code className="h-5 w-5 text-blue-400" />
+                            </div>
+                            <div>
+                              <div className="font-medium text-white">Clean Code</div>
+                              <div className="text-sm text-gray-400">Maintainable solutions</div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <div className="bg-blue-500/20 p-2 rounded-lg">
+                              <ArrowDown className="h-5 w-5 text-blue-400" />
+                            </div>
+                            <div>
+                              <div className="font-medium text-white">Fast Delivery</div>
+                              <div className="text-sm text-gray-400">Quick turnaround time</div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="mt-auto pt-4 flex gap-3">
+                          <a href="https://github.com/ibstromsvag" target="_blank" rel="noopener noreferrer" className="bg-gray-800 hover:bg-gray-700 p-2 rounded-lg transition-colors">
+                            <Github className="h-5 w-5" />
+                          </a>
+                          <a href="https://linkedin.com/in/ib-strømsvåg" target="_blank" rel="noopener noreferrer" className="bg-gray-800 hover:bg-gray-700 p-2 rounded-lg transition-colors">
+                            <Linkedin className="h-5 w-5" />
+                          </a>
+                          <a href="mailto:ibjulian9@gmail.com" className="bg-gray-800 hover:bg-gray-700 p-2 rounded-lg transition-colors">
+                            <Mail className="h-5 w-5" />
+                          </a>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </TiltCard>
-              </ScrollAnimation>
-              
-              {/* Featured Projects Preview */}
-              <ScrollAnimation delay={0.8}>
-                <div className="mb-8">
-                  <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-xl md:text-2xl font-bold text-blue-400">Utvalgte prosjekter</h2>
-                    <button 
-                      onClick={() => handleSectionChange('projects')}
-                      className="text-blue-400 hover:text-blue-300 flex items-center gap-1 text-sm"
-                    >
-                      Se alle <ArrowRight size={14} />
-                    </button>
-                  </div>
+                    </TiltCard>
+                  </BentoItem>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {projects.slice(0, 2).map((project, index) => (
-                      <ProjectCard key={index} {...project} />
-                    ))}
-                  </div>
+                  {/* Experience */}
+                  <BentoItem colSpan={1} rowSpan={1} className="bento-item">
+                    <TiltCard className="h-full">
+                      <div className="bg-white/5 rounded-xl p-6 h-full flex flex-col backdrop-blur-sm border border-gray-700/30">
+                        <h2 className="text-xl font-bold text-white mb-4">Erfaring</h2>
+                        
+                        <div className="flex flex-col items-center justify-center h-full">
+                          <div className="text-center mb-6">
+                            <div className="text-5xl font-bold text-white">1</div>
+                            <div className="text-gray-400 mt-1">År Erfaring</div>
+                          </div>
+                          
+                          <div className="text-center">
+                            <div className="text-5xl font-bold text-white">36</div>
+                            <div className="text-gray-400 mt-1">Prosjekter Fullført</div>
+                            <div className="text-xs text-gray-500 mt-1">og teller...</div>
+                          </div>
+                        </div>
+                      </div>
+                    </TiltCard>
+                  </BentoItem>
+                    
+                    {/* Current Focus */}
+                    <BentoItem colSpan={2} rowSpan={1} className="bento-item">
+                      <TiltCard className="h-full">
+                        <div className="bg-white/5 rounded-xl p-6 h-full flex flex-col backdrop-blur-sm border border-gray-700/30">
+                          <h2 className="text-xl font-bold text-white mb-4">Nåværende Fokus</h2>
+                          
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="flex items-start gap-3">
+                              <div className="bg-blue-500/20 p-2 rounded-lg mt-1">
+                                <Code className="h-5 w-5 text-blue-400" />
+                              </div>
+                              <div>
+                                <div className="font-medium text-white">Performance Optimization</div>
+                                <div className="text-sm text-gray-400">Creating blazing fast web applications</div>
+                              </div>
+                            </div>
+                            
+                            <div className="flex items-start gap-3">
+                              <div className="bg-purple-500/20 p-2 rounded-lg mt-1">
+                                <Database className="h-5 w-5 text-purple-400" />
+                              </div>
+                              <div>
+                                <div className="font-medium text-white">Edge Computing</div>
+                                <div className="text-sm text-gray-400">Leveraging modern infrastructure</div>
+                              </div>
+                            </div>
+                            
+                            <div className="flex items-start gap-3">
+                              <div className="bg-green-500/20 p-2 rounded-lg mt-1">
+                                <PenTool className="h-5 w-5 text-green-400" />
+                              </div>
+                              <div>
+                                <div className="font-medium text-white">Up To Date Designs</div>
+                                <div className="text-sm text-gray-400">Following the latest trends in design</div>
+                              </div>
+                            </div>
+                            
+                            <div className="flex items-start gap-3">
+                              <div className="bg-yellow-500/20 p-2 rounded-lg mt-1">
+                                <ExternalLink className="h-5 w-5 text-yellow-400" />
+                              </div>
+                              <div>
+                                <div className="font-medium text-white">3D Integration</div>
+                                <div className="text-sm text-gray-400">Bringing websites to life with 3D elements</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </TiltCard>
+                    </BentoItem>
+                    
+                    {/* Let's Connect */}
+                    <BentoItem colSpan={1} rowSpan={1} className="bento-item">
+                      <TiltCard className="h-full">
+                        <div className="bg-black/30 rounded-xl p-6 h-full flex flex-col backdrop-blur-sm border border-gray-700/30">
+                          <h2 className="text-xl font-bold text-white mb-4">La oss snakke</h2>
+                          
+                          <p className="text-gray-300 mb-6">
+                            Har du et prosjekt i tankene? La oss diskutere hvordan vi kan jobbe sammen.
+                          </p>
+                          
+                          <button 
+                            onClick={() => handleSectionChange('contact')}
+                            className="mt-auto bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors w-full"
+                          >
+                            Ta kontakt
+                          </button>
+                        </div>
+                      </TiltCard>
+                    </BentoItem>
+                    
+                    {/* Education */}
+                    <BentoItem colSpan={2} rowSpan={1} className="bento-item">
+                      <TiltCard className="h-full">
+                        <div className="bg-white/5 rounded-xl p-6 h-full flex flex-col backdrop-blur-sm border border-gray-700/30">
+                          <h2 className="text-xl font-bold text-white mb-4">Utdanning</h2>
+                          <div className="space-y-3">
+                            <div>
+                              <p className="text-sm text-blue-400">2024-2025 - Tangen VGS Informasjonsteknologi VG2</p>
+                              <p className="text-gray-300 mt-1 text-sm">Fordypning i programmering og systemutvikling</p>
+                            </div>
+                            <div>
+                              <p className="text-sm text-blue-400">2023-2024 - Tangen VGS Informasjonsteknologi og medieproduksjon VG1</p>
+                              <p className="text-gray-300 mt-1 text-sm">Grunnleggende IT-fag og medieproduksjon</p>
+                            </div>
+                          </div>
+                        </div>
+                      </TiltCard>
+                    </BentoItem>
+                    
+                    {/* Birthday Countdown */}
+                    <BentoItem colSpan={1} rowSpan={1} className="bento-item">
+                      <TiltCard className="h-full">
+                        <div className="bg-white/5 rounded-xl p-6 h-full flex flex-col backdrop-blur-sm border border-gray-700/30">
+                          <h2 className="text-lg font-bold text-white mb-4">Nedtelling til 18-årsdagen</h2>
+                          <div className="grid grid-cols-4 gap-2 text-center">
+                            <div className="bg-gray-800/50 p-2 rounded-lg">
+                              <div className="text-xl font-bold">0</div>
+                              <div className="text-xs text-gray-400">Dager</div>
+                            </div>
+                            <div className="bg-gray-800/50 p-2 rounded-lg">
+                              <div className="text-xl font-bold">0</div>
+                              <div className="text-xs text-gray-400">Timer</div>
+                            </div>
+                            <div className="bg-gray-800/50 p-2 rounded-lg">
+                              <div className="text-xl font-bold">0</div>
+                              <div className="text-xs text-gray-400">Min</div>
+                            </div>
+                            <div className="bg-gray-800/50 p-2 rounded-lg">
+                              <div className="text-xl font-bold">0</div>
+                              <div className="text-xs text-gray-400">Sek</div>
+                            </div>
+                          </div>
+                          <p className="text-center text-xs text-gray-400 mt-3">31. Mars 2025 - Jeg blir 18 år!</p>
+                        </div>
+                      </TiltCard>
+                    </BentoItem>
+                    
+                    {/* Featured Projects */}
+                    <BentoItem colSpan={3} rowSpan={1} className="bento-item">
+                      <TiltCard className="h-full">
+                        <div className="bg-white/5 rounded-xl p-6 h-full flex flex-col backdrop-blur-sm border border-gray-700/30">
+                          <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-xl font-bold text-white">Utvalgte prosjekter</h2>
+                            <button 
+                              onClick={() => handleSectionChange('projects')}
+                              className="text-blue-400 hover:text-blue-300 flex items-center gap-1 text-sm"
+                            >
+                              Se alle <ArrowRight size={14} />
+                            </button>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {projects.slice(0, 3).map((project, index) => (
+                              <div key={index} className="bg-gray-800/30 rounded-lg overflow-hidden border border-gray-700/50 hover:border-blue-500/30 transition-all group">
+                                <div className="h-32 relative overflow-hidden">
+                                  <Image 
+                                    src={project.image} 
+                                    alt={project.title}
+                                    fill
+                                    style={{ objectFit: 'cover' }}
+                                    className="group-hover:scale-105 transition-transform duration-300"
+                                  />
+                                </div>
+                                <div className="p-3">
+                                  <h3 className="font-medium text-white">{project.title}</h3>
+                                  <div className="flex flex-wrap gap-1 mt-2">
+                                    {project.tags.slice(0, 2).map((tag, i) => (
+                                      <span key={i} className="text-xs bg-blue-900/30 text-blue-300 px-2 py-0.5 rounded">
+                                        {tag}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </TiltCard>
+                    </BentoItem>
+                  </BentoGrid>
                 </div>
-              </ScrollAnimation>
+              
+              {/* Rolling Gallery Section */}
+              <div className="mt-16 mb-16 gallery-section">
+                <h2 className="text-2xl font-bold mb-8 text-center text-blue-400">Project Gallery</h2>
+                <div className="rounded-xl overflow-hidden shadow-2xl bg-[#0a192f]">
+                  <RollingGallery autoplay={true} pauseOnHover={true} />
+                </div>
+              </div>
             </section>
           )}
-
+          
           {/* Projects Section */}
           {activeSection === 'projects' && (
-            <section className="max-w-6xl mx-auto py-8 md:py-20">
-              <ScrollAnimation delay={0.2}>
-                <h2 className="text-2xl md:text-5xl font-bold mb-6 md:mb-12 bg-gradient-to-r from-blue-400 to-white text-transparent bg-clip-text">
-                  Mine Prosjekter
-                </h2>
-              </ScrollAnimation>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
+            <section className="max-w-6xl mx-auto">
+              <h2 className="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text">Mine Prosjekter</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {projects.map((project, index) => (
-                  <ScrollAnimation key={index} delay={0.3 + index * 0.1}>
-                    <ProjectCard {...project} />
-                  </ScrollAnimation>
+                  <ProjectCard key={index} {...project} />
                 ))}
               </div>
             </section>
           )}
-
-          {/* CV Section */}
-          {activeSection === 'cv' && (
-            <section className="max-w-6xl mx-auto py-8 md:py-16">
-              <ScrollAnimation delay={0.2}>
-                <h2 className="text-2xl md:text-4xl font-bold mb-8 bg-gradient-to-r from-blue-400 to-white text-transparent bg-clip-text">
-                  Ib Trollnes Strømsvåg
-                </h2>
-                <p className="text-gray-300 mb-6">Full-Stack Developer</p>
-              </ScrollAnimation>
-              
-              <div className="bg-[#0d1b30] rounded-xl p-6 md:p-8 border border-gray-800 shadow-xl">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
-                  {/* Left Column */}
-                  <div className="space-y-6">
-                    <div>
-                      <h3 className="text-lg font-bold text-blue-400 mb-4 flex items-center gap-2">
-                        <User className="h-5 w-5" /> Om meg
-                      </h3>
-                      <p className="text-gray-300 text-sm">
-                        Jeg er en nysgjerrig person som liker å utforske nye konsepter, teknologier og andre ting.
-                        Jeg er interessert i alt av teknologi og vitenskap og vil alltid lære noe nytt.
-                      </p>
-                    </div>
-                    
-                    <div>
-                      <h3 className="text-lg font-bold text-blue-400 mb-4 flex items-center gap-2">
-                        <Globe className="h-5 w-5" /> Språk
-                      </h3>
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          <span className="text-blue-400">•</span>
-                          <p className="text-white text-sm">Norsk: muntlig og skriftlig</p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-blue-400">•</span>
-                          <p className="text-white text-sm">Engelsk: Muntlig og skriftlig</p>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <h3 className="text-lg font-bold text-blue-400 mb-4 flex items-center gap-2">
-                        <Star className="h-5 w-5" /> Personlige kvalifikasjoner
-                      </h3>
-                      <ul className="text-gray-300 space-y-1 text-sm">
-                        <li className="flex items-center gap-2">
-                          <span className="text-blue-400">•</span>
-                          <span>Lærevillig</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-blue-400">•</span>
-                          <span>Selvstendig</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-blue-400">•</span>
-                          <span>Ambisiøs</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-blue-400">•</span>
-                          <span>Nysgjerrig</span>
-                        </li>
-                      </ul>
-                    </div>
-                    
-                    <div>
-                      <h3 className="text-lg font-bold text-blue-400 mb-4 flex items-center gap-2">
-                        <Mail className="h-5 w-5" /> Kontakt & SoMe
-                      </h3>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex items-center gap-2">
-                          <span className="text-blue-400">•</span>
-                          <p className="text-gray-300">+47 483 81 121</p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-blue-400">•</span>
-                          <p className="text-gray-300">ibjulian9@gmail.com</p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-blue-400">•</span>
-                          <p className="text-gray-300">Eigstien 78B, 4637, Kristiansand</p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-blue-400">•</span>
-                          <p className="text-gray-300">/in/ib-stromsvåg</p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-blue-400">•</span>
-                          <p className="text-gray-300">ibstromsvag</p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-blue-400">•</span>
-                          <p className="text-gray-300">ibstromsvag.com</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Middle Column */}
-                  <div className="space-y-6">
-                    <div>
-                      <h3 className="text-lg font-bold text-blue-400 mb-4 flex items-center gap-2">
-                        <Code className="h-5 w-5" /> Programmeringskunnskap
-                      </h3>
-                      <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-                        <div className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                          <span className="text-gray-300 text-sm">Next.js</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                          <span className="text-gray-300 text-sm">React.js</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                          <span className="text-gray-300 text-sm">Tailwind CSS</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                          <span className="text-gray-300 text-sm">TypeScript</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                          <span className="text-gray-300 text-sm">JavaScript</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                          <span className="text-gray-300 text-sm">Node.js</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                          <span className="text-gray-300 text-sm">Prisma</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                          <span className="text-gray-300 text-sm">HTML</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                          <span className="text-gray-300 text-sm">CSS/SCSS</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                          <span className="text-gray-300 text-sm">Figma</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                          <span className="text-gray-300 text-sm">Git</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                          <span className="text-gray-300 text-sm">Illustrator</span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <h3 className="text-lg font-bold text-blue-400 mb-4 flex items-center gap-2">
-                        <Briefcase className="h-5 w-5" /> Yrkeserfaring
-                      </h3>
-                      <div className="space-y-3">
-                        <div>
-                          <p className="text-sm text-blue-400">2024 - Vigo - vaktmester assistent (juni - August)</p>
-                          <p className="text-gray-300 mt-1 text-sm">Assisterte med vedlikehold og praktiske oppgaver</p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-blue-400">2025 - Arendal Grimstad Rideklubb fore-assistent (nåværende)</p>
-                          <p className="text-gray-300 mt-1 text-sm">Assisterer med foring og stell av hester</p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-blue-400">2022 - Volvo - Utplassering mekaniker (2 uker i November)</p>
-                          <p className="text-gray-300 mt-1 text-sm">Praktisk erfaring med bilmekanikk og service</p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-blue-400">2025 - IKT-Agder - Utplassering driftstøtte (uke 6 - 7)</p>
-                          <p className="text-gray-300 mt-1 text-sm">Erfaring med IT-support og systemdrift</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Right Column */}
-                  <div className="space-y-6">
-                    <div>
-                      <h3 className="text-lg font-bold text-blue-400 mb-4 flex items-center gap-2">
-                        <GraduationCap className="h-5 w-5" /> Utdanning
-                      </h3>
-                      <div className="space-y-3">
-                        <div>
-                          <p className="text-sm text-blue-400">2024-2025 - Tangen VGS Informasjonsteknologi VG2</p>
-                          <p className="text-gray-300 mt-1 text-sm">Fordypning i programmering og systemutvikling</p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-blue-400">2023-2024 - Tangen VGS Informasjonsteknologi og medieproduksjon VG1</p>
-                          <p className="text-gray-300 mt-1 text-sm">Grunnleggende IT-fag og medieproduksjon</p>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <h3 className="text-lg font-bold text-blue-400 mb-4 flex items-center gap-2">
-                        <BookOpen className="h-5 w-5" /> Programfag
-                      </h3>
-                      <ul className="text-gray-300 space-y-1 text-sm">
-                        <li className="flex items-center gap-2">
-                          <span className="text-blue-400">•</span>
-                          <span>Teknologiforståelse</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-blue-400">•</span>
-                          <span>Produksjon og historiefortelling</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-blue-400">•</span>
-                          <span>Konseptutvikling og programmering</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-blue-400">•</span>
-                          <span>Brukeratferd</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-blue-400">•</span>
-                          <span>Driftstøtte</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-blue-400">•</span>
-                          <span>Utvikling</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-blue-400">•</span>
-                          <span>Yrkesrettet fordypning</span>
-                        </li>
-                      </ul>
-                    </div>
-                    
-                    <div>
-                      <h3 className="text-lg font-bold text-blue-400 mb-4 flex items-center gap-2">
-                        <Users className="h-5 w-5" /> Referanser
-                      </h3>
-                      <div className="space-y-2">
-                        <div>
-                          <p className="text-white text-sm">Oppgis ved forespørsel</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="mt-8 text-center">
-                  <button 
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors inline-flex items-center gap-2"
-                    onClick={() => window.open('/cv.pdf', '_blank')}
-                  >
-                    Last ned CV <ArrowRight size={16} />
-                  </button>
-                </div>
-              </div>
-            </section>
-          )}
-
-          {/* Contact Section */}
-          {activeSection === 'contact' && (
-            <section className="max-w-6xl mx-auto py-8 md:py-20">
-              <ScrollAnimation delay={0.2}>
-                <h2 className="text-2xl md:text-5xl font-bold mb-6 md:mb-12 bg-gradient-to-r from-blue-400 to-white text-transparent bg-clip-text">
-                  Kontakt Meg
-                </h2>
-              </ScrollAnimation>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* Contact Info */}
-                <ScrollAnimation delay={0.3}>
-                  <div>
-                    <h3 className="text-xl font-bold mb-4 text-blue-400">La oss snakke sammen</h3>
-                    <p className="text-gray-300 mb-6">
-                      Har du et prosjekt i tankene eller bare vil si hei? Send meg en melding, og jeg vil svare så snart som mulig.
-                    </p>
-                    
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-3">
-                        <div className="bg-blue-900/30 p-3 rounded-full">
-                          <Mail className="h-5 w-5 text-blue-400" />
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-400">Email</p>
-                          <p className="text-white">ibjulian9@gmail.com</p>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center gap-3">
-                        <div className="bg-blue-900/30 p-3 rounded-full">
-                          <Phone className="h-5 w-5 text-blue-400" />
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-400">Telefon</p>
-                          <p className="text-white">+47 483 81 121</p>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center gap-3">
-                        <div className="bg-blue-900/30 p-3 rounded-full">
-                          <Globe className="h-5 w-5 text-blue-400" />
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-400">Nettside</p>
-                          <p className="text-white">ibstromsvag.com</p>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="mt-8">
-                      <h4 className="text-lg font-bold mb-3 text-blue-400">Følg meg</h4>
-                      <div className="flex gap-4">
-                        <a href="https://github.com/ibstromsvag" target="_blank" rel="noopener noreferrer" className="bg-gray-800 hover:bg-gray-700 p-3 rounded-full transition-colors">
-                          <Github className="h-5 w-5" />
-                        </a>
-                        <a href="https://linkedin.com/in/ib-strømsvåg" target="_blank" rel="noopener noreferrer" className="bg-gray-800 hover:bg-gray-700 p-3 rounded-full transition-colors">
-                          <Linkedin className="h-5 w-5" />
-                        </a>
-                        <a href="https://instagram.com/ibstromsvag" target="_blank" rel="noopener noreferrer" className="bg-gray-800 hover:bg-gray-700 p-3 rounded-full transition-colors">
-                          <Instagram className="h-5 w-5" />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </ScrollAnimation>
-                
-                {/* Contact Form */}
-                <ScrollAnimation delay={0.4}>
-                  <div className="bg-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50">
-                    <h3 className="text-xl font-bold mb-4">Send meg en melding</h3>
-                    
-                    <form className="space-y-4">
-                      <div>
-                        <label htmlFor="name" className="block text-sm font-medium text-gray-400 mb-1">Navn</label>
-                        <input 
-                          type="text" 
-                          id="name" 
-                          className="w-full bg-gray-900/50 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                          placeholder="Ditt navn"
-                        />
-                      </div>
-                      
-                      <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-400 mb-1">Email</label>
-                        <input 
-                          type="email" 
-                          id="email" 
-                          className="w-full bg-gray-900/50 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                          placeholder="din.email@example.com"
-                        />
-                      </div>
-                      
-                      <div>
-                        <label htmlFor="subject" className="block text-sm font-medium text-gray-400 mb-1">Emne</label>
-                        <input 
-                          type="text" 
-                          id="subject" 
-                          className="w-full bg-gray-900/50 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                          placeholder="Hva handler dette om?"
-                        />
-                      </div>
-                      
-                      <div>
-                        <label htmlFor="message" className="block text-sm font-medium text-gray-400 mb-1">Melding</label>
-                        <textarea 
-                          id="message" 
-                          rows={4} 
-                          className="w-full bg-gray-900/50 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                          placeholder="Skriv din melding her..."
-                        ></textarea>
-                      </div>
-                      
-                      <button 
-                        type="submit" 
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-colors flex items-center justify-center gap-2 touch-manipulation"
-                      >
-                        Send melding <ArrowRight size={16} />
-                      </button>
-                    </form>
-                  </div>
-                </ScrollAnimation>
-              </div>
-            </section>
-          )}
+          
+          {/* Other sections would go here */}
         </PageTransition>
       </div>
       
-      {/* Footer */}
       <Footer />
     </main>
-  )
+  );
 }

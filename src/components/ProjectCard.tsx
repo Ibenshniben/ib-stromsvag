@@ -1,8 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-// Link import removed
 import { ExternalLink } from 'lucide-react';
-// ArrowRight import removed
 import TiltCard from './TiltCard';
 
 interface ProjectCardProps {
@@ -11,42 +9,64 @@ interface ProjectCardProps {
   image: string;
   tags: string[];
   link: string;
+  className?: string;
+  aspectRatio?: 'square' | 'wide' | 'tall';
+  priority?: boolean;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ title, description, image, tags, link }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ 
+  title, 
+  description, 
+  image, 
+  tags, 
+  link, 
+  className = '',
+  aspectRatio = 'square',
+  priority = false
+}) => {
+  const aspectRatioClasses = {
+    square: 'aspect-square',
+    wide: 'aspect-[2/1]',
+    tall: 'aspect-[1/2]'
+  };
+
   return (
-    <TiltCard className="h-full">
-      <div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700/50 hover:border-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/10 h-full flex flex-col">
-        <div className="relative h-40 sm:h-48 w-full">
+    <TiltCard className={`h-full ${className}`}>
+      <div className="bg-white rounded-xl overflow-hidden border border-gray-200 hover:shadow-lg transition-all h-full flex flex-col">
+        <div className={`relative w-full ${aspectRatioClasses[aspectRatio]}`}>
           <Image 
             src={image} 
             alt={title}
             fill
+            priority={priority}
             className="object-cover"
-            loading="lazy"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 hover:opacity-100 transition-opacity flex items-end p-4">
+            <a 
+              href={link} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="inline-flex items-center gap-1 text-white text-sm font-medium"
+            >
+              View project <ExternalLink size={14} />
+            </a>
+          </div>
         </div>
-        <div className="p-4 sm:p-6 flex flex-col flex-grow">
-          <h3 className="text-lg sm:text-xl font-bold text-white mb-2">{title}</h3>
-          <p className="text-gray-300 mb-4 flex-grow text-sm sm:text-base">{description}</p>
-          <div className="flex flex-wrap gap-2 mb-4">
+        
+        <div className="p-5 flex flex-col flex-grow">
+          <h3 className="text-xl font-bold text-gray-800 mb-2">{title}</h3>
+          <p className="text-gray-600 text-sm mb-4 flex-grow">{description}</p>
+          
+          <div className="flex flex-wrap gap-2">
             {tags.map((tag, index) => (
               <span 
                 key={index} 
-                className="bg-blue-900/30 text-blue-300 px-2 py-1 rounded-full text-xs"
+                className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-md"
               >
                 {tag}
               </span>
             ))}
           </div>
-          <a 
-            href={link} 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 transition-all transform hover:translate-x-1 touch-manipulation text-sm sm:text-base"
-          >
-            Se prosjektet <ExternalLink size={16} />
-          </a>
         </div>
       </div>
     </TiltCard>
