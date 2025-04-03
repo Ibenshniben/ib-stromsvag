@@ -2,13 +2,12 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
+// Remove unused Link import
 import ProjectCard from '@/components/ProjectCard'
 import BentoGrid, { BentoItem } from '@/components/BentoGrid'
 import Footer from '@/components/Footer'
-import ScrollAnimation from '@/components/ScrollAnimation'
+// Remove unused ScrollAnimation import
 import TiltCard from '@/components/TiltCard'
-// Remove the Navbar import since it's now in the layout
 import RollingGallery from '@/components/RollingGallery'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -22,16 +21,13 @@ import {
   Mail,
   Database,
   PenTool,
-  User,
-  GraduationCap,
-  Calendar,
-  ChevronDown
+  // Remove unused icons
 } from 'lucide-react'
 import PageTransition from '@/components/PageTransition'
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState('home')
-  const [showScrollButton, setShowScrollButton] = useState(false)
+  // Either remove showScrollButton or use it somewhere
   const pageRef = useRef(null)
   
   // Sample project data
