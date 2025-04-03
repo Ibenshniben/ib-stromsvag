@@ -14,6 +14,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { 
   ArrowDown, 
   ArrowRight, 
+  ArrowUp,  // Added ArrowUp import
   Code, 
   ExternalLink, 
   Github, 

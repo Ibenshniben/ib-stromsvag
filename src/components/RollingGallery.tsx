@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react"; // Added useCallback
+import Image from "next/image"; // Added Image import
 import {
   motion,
   useMotionValue,
@@ -63,35 +64,24 @@ const RollingGallery: React.FC<RollingGalleryProps> = ({
     (val: number) => `rotate3d(0,1,0,${val}deg)`
   );
 
-  const startInfiniteSpin = (startAngle: number) => {
+  // Wrap startInfiniteSpin in useCallback
+  const startInfiniteSpin = useCallback((initialAngle: number) => {
     controls.start({
-      rotateY: [startAngle, startAngle - 360],
+      rotateY: [initialAngle, initialAngle + 360],
       transition: {
         duration: 20,
         ease: "linear",
         repeat: Infinity,
+        repeatType: "loop",
       },
     });
-  };
+  }, [controls]);
 
-  // Fix for the missing dependencies in useEffect and any types
-  
-  // In the useEffect hook that has missing dependencies:
-  useEffect(() => {
-    if (autoplay) {
-      startInfiniteSpin(rotation.get());
-    }
-    
-    return () => {
-      controls.stop();
-    };
-  }, [autoplay, controls, rotation, startInfiniteSpin]);
-  
-  // Fix for the any types:
-  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>): void => {
-    controls.stop();
-  };
-  
+  // Remove unused handleMouseDown or use it somewhere
+  // const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>): void => {
+  //   controls.stop();
+  // };
+
   const handleDrag = (_: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>, info: PanInfo): void => {
     rotation.set(rotation.get() + info.delta.x * dragFactor);
   };
