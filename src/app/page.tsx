@@ -27,7 +27,8 @@ import PageTransition from '@/components/PageTransition'
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState('home')
-  // Either remove showScrollButton or use it somewhere
+  // Either use showScrollButton or remove it
+  const [showScrollButton, setShowScrollButton] = useState(false)
   const pageRef = useRef(null)
   
   // Sample project data
@@ -140,10 +141,21 @@ export default function Home() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Add a scroll to top button that uses showScrollButton
   return (
     <main ref={pageRef} className="min-h-screen bg-[#0a192f] text-white relative">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#0a192f] to-[#020c1b] pointer-events-none"></div>
+      
+      {/* Add scroll to top button */}
+      {showScrollButton && (
+        <button 
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-8 right-8 bg-blue-600 text-white p-3 rounded-full shadow-lg z-50 hover:bg-blue-700 transition-colors"
+        >
+          <ArrowUp size={20} />
+        </button>
+      )}
       
       {/* Remove the Navbar component from here since it's now in the layout */}
       

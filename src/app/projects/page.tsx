@@ -7,7 +7,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { 
   ExternalLink, 
   Github, 
-  Code,
+  // Removed unused Code import
   Search,
   Filter
 } from 'lucide-react'

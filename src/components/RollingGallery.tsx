@@ -74,34 +74,65 @@ const RollingGallery: React.FC<RollingGalleryProps> = ({
     });
   };
 
+  // Fix for the missing dependencies in useEffect and any types
+  
+  // In the useEffect hook that has missing dependencies:
   useEffect(() => {
     if (autoplay) {
-      const currentAngle = rotation.get();
-      startInfiniteSpin(currentAngle);
-    } else {
+      startInfiniteSpin(rotation.get());
+    }
+    
+    return () => {
       controls.stop();
-    }
-  }, [autoplay]);
-
-  const handleUpdate = (latest: any) => {
-    if (typeof latest.rotateY === "number") {
-      rotation.set(latest.rotateY);
-    }
-  };
-
-  const handleDrag = (_: any, info: PanInfo): void => {
+    };
+  }, [autoplay, controls, rotation, startInfiniteSpin]);
+  
+  // Fix for the any types:
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>): void => {
     controls.stop();
-    rotation.set(rotation.get() + info.offset.x * dragFactor);
   };
-
-  const handleDragEnd = (_: any, info: PanInfo): void => {
+  
+  const handleDrag = (_: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>, info: PanInfo): void => {
+    rotation.set(rotation.get() + info.delta.x * dragFactor);
+  };
+  
+  const handleDragEnd = (_: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>, info: PanInfo): void => {
     const finalAngle = rotation.get() + info.velocity.x * dragFactor;
     rotation.set(finalAngle);
     if (autoplay) {
       startInfiniteSpin(finalAngle);
     }
   };
-
+  
+  // Replace img with Next.js Image component:
+  {galleryImages.map((src, i) => {
+    const angle = (i / faceCount) * 360;
+    const z = radius * Math.cos((angle * Math.PI) / 180);
+    const x = radius * Math.sin((angle * Math.PI) / 180);
+    
+    return (
+      <motion.div
+        key={i}
+        className="absolute origin-center"
+        style={{
+          width: faceWidth,
+          height: "100%",
+          transform: `translate3d(${x}px, 0, ${z}px) rotateY(${angle}deg)`,
+          transformStyle: "preserve-3d",
+        }}
+      >
+        <div className="w-full h-full overflow-hidden rounded-lg">
+          <Image
+            src={src}
+            alt={`Gallery image ${i + 1}`}
+            width={500}
+            height={300}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      </motion.div>
+    );
+  })}
   const handleMouseEnter = (): void => {
     if (autoplay && pauseOnHover) {
       controls.stop();
