@@ -82,11 +82,12 @@ const RollingGallery: React.FC<RollingGalleryProps> = ({
   //   controls.stop();
   // };
 
-  const handleDrag = (_: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>, info: PanInfo): void => {
+  // Fix the type signatures for handleDrag and handleDragEnd
+  const handleDrag = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo): void => {
     rotation.set(rotation.get() + info.delta.x * dragFactor);
   };
   
-  const handleDragEnd = (_: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>, info: PanInfo): void => {
+  const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo): void => {
     const finalAngle = rotation.get() + info.velocity.x * dragFactor;
     rotation.set(finalAngle);
     if (autoplay) {
