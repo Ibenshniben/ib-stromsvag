@@ -8,7 +8,7 @@ import BentoGrid, { BentoItem } from '@/components/BentoGrid'
 import Footer from '@/components/Footer'
 import ScrollAnimation from '@/components/ScrollAnimation'
 import TiltCard from '@/components/TiltCard'
-import Navbar from '@/components/Navbar'
+// Remove the Navbar import since it's now in the layout
 import RollingGallery from '@/components/RollingGallery'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -149,42 +149,7 @@ export default function Home() {
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#0a192f] to-[#020c1b] pointer-events-none"></div>
       
-      {/* Custom Navbar that matches the image */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[#0a192f]/90 backdrop-blur-sm py-4 px-4">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          {/* Logo */}
-          <div className="bg-blue-600 text-white px-3 py-1 rounded-md font-bold text-sm">
-            IB STRØMSVÅG
-          </div>
-          
-          {/* Navigation */}
-          <div className="bg-[#172a46] rounded-full px-2 py-1 hidden md:flex">
-            {['Home', 'Projects', 'CV', 'Contact'].map((item) => (
-              <button
-                key={item.toLowerCase()}
-                onClick={() => handleSectionChange(item.toLowerCase())}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                  activeSection === item.toLowerCase() 
-                    ? 'bg-blue-600 text-white shadow-sm' 
-                    : 'text-gray-300 hover:text-white'
-                }`}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
-          
-          {/* Right side buttons */}
-          <div className="flex items-center gap-2">
-            <button 
-              onClick={() => handleSectionChange('contact')}
-              className="px-3 py-1.5 rounded-full text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors"
-            >
-              Contact
-            </button>
-          </div>
-        </div>
-      </header>
+      {/* Remove the Navbar component from here since it's now in the layout */}
       
       <div className="pt-24 px-4 pb-16 max-w-7xl mx-auto">
         <PageTransition activeSection={activeSection}>
@@ -192,7 +157,7 @@ export default function Home() {
           {activeSection === 'home' && (
             <section>
               {/* Hero Section - Full height with centered content */}
-              <div className="min-h-[80vh] flex flex-col md:flex-row justify-center items-center mb-16 relative">
+              <div className="min-h-[80vh] flex flex-col justify-end items-center mb-16 relative">
                 {/* Background image */}
                 <div className="absolute inset-0 z-0">
                   <Image 
@@ -203,23 +168,13 @@ export default function Home() {
                     className="opacity-70"
                     priority
                   />
-                  {/* Removed the blue gradient overlay */}
                 </div>
                 
-                {/* Left side - empty or can contain a smaller image if needed */}
-                <div className="hidden md:block md:w-3/5 relative z-10"></div>
-                
-                {/* Right side - text content - adjusted width and padding */}
-                <div className="w-full md:w-2/5 p-6 pr-8 relative z-10 text-left">
-                  <h1 className="hero-title text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text">
+                {/* Text content - centered at bottom */}
+                <div className="w-full p-6 relative z-10 text-center mb-12">
+                  <h1 className="hero-title text-5xl md:text-7xl font-bold mix-blend-difference">
                     Ib Strømsvåg
                   </h1>
-                  <p className="hero-subtitle text-lg md:text-xl text-gray-300 max-w-md mb-8">
-                    Ung utvikler med lidenskap for webutvikling, design og teknologi
-                  </p>
-                  <div className="scroll-indicator animate-bounce">
-                    <ChevronDown className="h-6 w-6 text-blue-400" />
-                  </div>
                 </div>
               </div>
               
