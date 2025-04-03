@@ -123,7 +123,13 @@ const RollingGallery: React.FC<RollingGalleryProps> = ({
         </div>
       </motion.div>
     );
-  })}
+  })};
+  // Add the handleUpdate function
+    const handleUpdate = useCallback(() => {
+      // This function is called on every animation frame
+      // You can use it to sync the rotation value with the animation
+    }, []);
+  
   const handleMouseEnter = (): void => {
     if (autoplay && pauseOnHover) {
       controls.stop();
@@ -162,7 +168,7 @@ const RollingGallery: React.FC<RollingGalleryProps> = ({
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           animate={controls}
-          onUpdate={handleUpdate}
+          // Remove the onUpdate prop
           style={{
             transform: transform,
             rotateY: rotation,
