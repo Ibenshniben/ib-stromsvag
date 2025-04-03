@@ -159,3 +159,88 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Add this to your existing CSS */
+
+/* High contrast mode */
+.high-contrast {
+  --bg-color: #000;
+  --text-color: #fff;
+  --link-color: #ffff00;
+  --heading-color: #fff;
+  --border-color: #fff;
+}
+
+.high-contrast body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.high-contrast a {
+  color: var(--link-color);
+}
+
+.high-contrast h1, 
+.high-contrast h2, 
+.high-contrast h3, 
+.high-contrast h4, 
+.high-contrast h5, 
+.high-contrast h6 {
+  color: var(--heading-color);
+}
+
+.high-contrast button,
+.high-contrast input,
+.high-contrast textarea {
+  border: 1px solid var(--border-color);
+}
+
+/* Accessibility button */
+.accessibility-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 100;
+  background-color: #0a192f;
+  color: white;
+  border: 2px solid #3b82f6;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.accessibility-button:hover {
+  background-color: #3b82f6;
+}
+
+.accessibility-panel {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  z-index: 100;
+  background-color: #0a192f;
+  border: 2px solid #3b82f6;
+  border-radius: 8px;
+  padding: 16px;
+  width: 250px;
+}
+
+.accessibility-panel button {
+  background-color: #172a46;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.accessibility-panel button:hover {
+  background-color: #3b82f6;
+}

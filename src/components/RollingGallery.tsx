@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useEffect, useState, useCallback } from "react"; // Added useCallback
-import Image from "next/image"; // Added Image import
+import React, { useEffect, useState, useCallback } from "react";
+import Image from "next/image";
 import {
   motion,
   useMotionValue,
@@ -77,11 +77,6 @@ const RollingGallery: React.FC<RollingGalleryProps> = ({
     });
   }, [controls]);
 
-  // Remove unused handleMouseDown or use it somewhere
-  // const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>): void => {
-  //   controls.stop();
-  // };
-
   // Fix the type signatures for handleDrag and handleDragEnd
   const handleDrag = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo): void => {
     rotation.set(rotation.get() + info.delta.x * dragFactor);
@@ -95,40 +90,11 @@ const RollingGallery: React.FC<RollingGalleryProps> = ({
     }
   };
   
-  // Replace img with Next.js Image component:
-  {galleryImages.map((src, i) => {
-    const angle = (i / faceCount) * 360;
-    const z = radius * Math.cos((angle * Math.PI) / 180);
-    const x = radius * Math.sin((angle * Math.PI) / 180);
-    
-    return (
-      <motion.div
-        key={i}
-        className="absolute origin-center"
-        style={{
-          width: faceWidth,
-          height: "100%",
-          transform: `translate3d(${x}px, 0, ${z}px) rotateY(${angle}deg)`,
-          transformStyle: "preserve-3d",
-        }}
-      >
-        <div className="w-full h-full overflow-hidden rounded-lg">
-          <Image
-            src={src}
-            alt={`Gallery image ${i + 1}`}
-            width={500}
-            height={300}
-            className="w-full h-full object-cover"
-          />
-        </div>
-      </motion.div>
-    );
-  })};
   // Add the handleUpdate function
-    const handleUpdate = useCallback(() => {
-      // This function is called on every animation frame
-      // You can use it to sync the rotation value with the animation
-    }, []);
+  const handleUpdate = useCallback(() => {
+    // This function is called on every animation frame
+    // You can use it to sync the rotation value with the animation
+  }, []);
   
   const handleMouseEnter = (): void => {
     if (autoplay && pauseOnHover) {
@@ -168,7 +134,7 @@ const RollingGallery: React.FC<RollingGalleryProps> = ({
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           animate={controls}
-          onUpdate={handleUpdate} // Add this line to use the handleUpdate function
+          onUpdate={handleUpdate}
           style={{
             transform: transform,
             rotateY: rotation,
