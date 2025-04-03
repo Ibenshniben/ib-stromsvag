@@ -28,7 +28,8 @@ const nextConfig = {
   
   // Cache and performance
   experimental: {
-    optimizeCss: true,
+    // Removing optimizeCss as it requires the critters package
+    // optimizeCss: true,
     scrollRestoration: true,
   },
   
