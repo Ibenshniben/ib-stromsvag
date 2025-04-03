@@ -168,7 +168,7 @@ const RollingGallery: React.FC<RollingGalleryProps> = ({
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           animate={controls}
-          // Remove the onUpdate prop
+          onUpdate={handleUpdate} // Add this line to use the handleUpdate function
           style={{
             transform: transform,
             rotateY: rotation,
@@ -186,9 +186,11 @@ const RollingGallery: React.FC<RollingGalleryProps> = ({
                 width: faceWidth,
               }}
             >
-              <img
+              <Image
                 src={url}
                 alt={`Gallery image ${i + 1}`}
+                width={500}
+                height={300}
                 className="h-auto w-full rounded-lg object-cover shadow-md transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-lg"
               />
             </div>
